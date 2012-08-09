@@ -110,14 +110,8 @@ if ( ! function_exists( 'ydn_posted_on' ) ) :
  * @since ydn 1.0
  */
 function ydn_posted_on() {
-	printf( __( 'Posted on <a href="%1$s" title="%2$s" rel="bookmark"><time class="entry-date" datetime="%3$s" pubdate>%4$s</time></a><span class="byline"> by <span class="author vcard"><a class="url fn n" href="%5$s" title="%6$s" rel="author">%7$s</a></span></span>', 'ydn' ),
-		esc_url( get_permalink() ),
-		esc_attr( get_the_time() ),
-		esc_attr( get_the_date( 'c' ) ),
-		esc_html( get_the_date() ),
-		esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-		esc_attr( sprintf( __( 'View all posts by %s', 'ydn' ), get_the_author() ) ),
-		esc_html( get_the_author() )
+	printf( __( '%1$s', 'ydn' ),
+		esc_html( get_the_date('l, F j, Y') )
 	);
 }
 endif;

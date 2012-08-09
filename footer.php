@@ -8,7 +8,7 @@
  * @since ydn 1.0
  */
 ?>
-
+    </div> <!-- everything row -->
 	</div><!-- #main -->
 
 	<footer id="colophon" class="site-footer" role="contentinfo">

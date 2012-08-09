@@ -45,18 +45,29 @@
 <body <?php body_class(); ?>>
 <div id="page" class="hfeed site">
 	<?php do_action( 'before' ); ?>
-	<header id="masthead" class="site-header" role="banner">
-		<hgroup>
-			<h1 class="site-title"><a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-			<h2 class="site-description"><?php bloginfo( 'description' ); ?></h2>
-		</hgroup>
+  <div id="pre-header" class="container">
+    <div class="pull-left">FOLLOW US <a target="_blank" href="http://www.facebook.com/YaleDailyNews"><img alt="Follow us on Facebook" src="http://yaledailynews.media.clients.ellingtoncms.com/static//ydnRedesign/images/facebook.png"></a> <a target="_blank" href="http://www.twitter.com/YaleDailyNews"><img alt="Follow us on Twitter" src="http://yaledailynews.media.clients.ellingtoncms.com/static//ydnRedesign/images/twitter.png"></a> &bull; <a href="/contact/">Contact Us</a> | <a href="/advertising/">Advertise</a> | <a href="http://alumni.yaledailynews.com/">Alumni</a> | <a href="/subscribe/">Subscribe</a> | <a href="/alerts/manage">Subscribe to e-mail headlines</a></div>
+    <div class="pull-right input-append"><input type="text" class="input-medium"><button class="btn" type="button">Search</button></div>
+  </div>
+	<header class="site-header" role="banner">
+    <div id="masthead" class="container">
+      <a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
+    </div>
 
 		<nav role="navigation" class="site-navigation main-navigation">
 			<h1 class="assistive-text"><?php _e( 'Menu', 'ydn' ); ?></h1>
 			<div class="assistive-text skip-link"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'ydn' ); ?>"><?php _e( 'Skip to content', '_s' ); ?></a></div>
-
-			<?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
+      <div class="navbar">
+        <div class="navbar-inner">
+          <?php wp_nav_menu( array( 'theme_location' => 'primary',
+                                    'container_class' => 'menu-primary-container container',
+                                    'walker' => new Bootstrap_Walker_Nav_Menu,
+                                    'menu_class' => 'nav'
+              ) ); ?>
+        </div>
+      </div>
 		</nav>
 	</header><!-- #masthead .site-header -->
 
-	<div id="main">
+	<div id="main" class="container">
+    <div class="row">

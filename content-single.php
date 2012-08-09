@@ -8,9 +8,14 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
 		<h1 class="entry-title"><?php the_title(); ?></h1>
-
+    <?php if(  has_post_thumbnail() ): ?>
+      <div class="entry-featured-image">
+        <?php the_post_thumbnail('entry-featured-image'); ?>
+      </div>
+    <?php endif; ?>
 		<div class="entry-meta">
-			<?php ydn_posted_on(); ?>
+      <div class="entry-authors">By <?php coauthors_posts_links(); ?></div>
+      <div class="entry-pubdate"><?php ydn_posted_on(); ?></div>
 		</div><!-- .entry-meta -->
 	</header><!-- .entry-header -->
 
