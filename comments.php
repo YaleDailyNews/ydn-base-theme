@@ -29,8 +29,7 @@
 	<?php if ( have_comments() ) : ?>
 		<h2 class="comments-title">
 			<?php
-				printf( _n( 'One thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', get_comments_number(), 'ydn' ),
-					number_format_i18n( get_comments_number() ), '<span>' . get_the_title() . '</span>' );
+				printf( __( 'Comments', 'ydn' ) );
 			?>
 		</h2>
 
@@ -42,7 +41,7 @@
 		</nav>
 		<?php endif; // check for comment navigation ?>
 
-		<ol class="commentlist">
+		<ul class="unstyled commentlist">
 			<?php
 				/* Loop through and list the comments. Tell wp_list_comments()
 				 * to use ydn_comment() to format the comments.
@@ -52,7 +51,7 @@
 				 */
 				wp_list_comments( array( 'callback' => 'ydn_comment' ) );
 			?>
-		</ol>
+		</ul>
 
 		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // are there comments to navigate through ?>
 		<nav role="navigation" id="comment-nav-below" class="site-navigation comment-navigation">

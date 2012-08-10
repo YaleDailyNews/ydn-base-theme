@@ -69,32 +69,29 @@ function ydn_comment( $comment, $args, $depth ) {
 	?>
 	<li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
 		<article id="comment-<?php comment_ID(); ?>" class="comment">
-			<footer>
+			<header>
 				<div class="comment-author vcard">
 					<?php echo get_avatar( $comment, 40 ); ?>
-					<?php printf( __( '%s <span class="says">says:</span>', 'ydn' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
+					<?php printf( __( '%s:', 'ydn' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
 				</div><!-- .comment-author .vcard -->
 				<?php if ( $comment->comment_approved == '0' ) : ?>
 					<em><?php _e( 'Your comment is awaiting moderation.', 'ydn' ); ?></em>
 					<br />
 				<?php endif; ?>
-
-				<div class="comment-meta commentmetadata">
-					<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><time pubdate datetime="<?php comment_time( 'c' ); ?>">
-					<?php
-						/* translators: 1: date, 2: time */
-						printf( __( '%1$s at %2$s', 'ydn' ), get_comment_date(), get_comment_time() ); ?>
-					</time></a>
-					<?php edit_comment_link( __( '(Edit)', 'ydn' ), ' ' );
-					?>
-				</div><!-- .comment-meta .commentmetadata -->
-			</footer>
+			</header>
 
 			<div class="comment-content"><?php comment_text(); ?></div>
+      <footer class="clearfix">
+        <a class="pull-left" href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><time pubdate datetime="<?php comment_time( 'c' ); ?>">
+					<?php
+						/* translators: 1: date, 2: time */
+						printf( __( 'Posted on %1$s at %2$s', 'ydn' ), get_comment_date(), get_comment_time() ); ?>
+					</time></a>
 
-			<div class="reply">
-				<?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-			</div><!-- .reply -->
+        <span class="reply pull-right">
+          <?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+        </span><!-- .reply -->
+      </footer>
 		</article><!-- #comment-## -->
 
 	<?php
@@ -116,6 +113,94 @@ function ydn_posted_on() {
 }
 endif;
 
+/**
+ * Returns a div with the post's featured image and associated metadata (e.g. caption, authors..)
+ * meant to be used within the loop. uses global $post
+ */
+if (! function_exists( 'ydn_get_featured_image') ):
+function ydn_get_featured_image() {
+  global $post;
+  if(  has_post_thumbnail() ):
+    $featured_image_id = get_post_thumbnail_id( $post->ID );
+    $featured_image_obj = get_posts( array( 'numberposts' => 1,
+                                            'include' => $featured_image_id,
+                                            'post_type' => 'attachment',
+                                            'post_parent' => $post->ID ) );
+    $featured_image_obj = $featured_image_obj[0];
+
+    ?>
+    <div class="entry-featured-image">
+      <?php  the_post_thumbnail('entry-featured-image'); ?>
+      <?php if($featured_image_obj): ?>
+        <div class="image-meta">
+          <?php if( $featured_image_obj->post_excerpt): ?>
+            <span class="caption"> <?php echo esc_html( $featured_image_obj->post_excerpt ); ?> </span> 
+          <?php endif; ?>
+          <?php
+            $attribution_text = get_media_credit_html($featured_image_obj);
+            if(trim($attribution_text) != ''  ): ?>
+              <span class="attribution">Photo by <?php echo $attribution_text; ?>.</span>
+          <?php endif; ?>
+        </div>
+      <?php endif; //end featured_image_obj check ?>
+    </div>
+    <?php endif; //end has_post_thumbnail condition
+}
+endif; // end function_exists condition
+
+
+/**
+ * Returns formatted author bylines with  the reporter type if available (e.g. staff reporters, contributing reporters)
+ * meant to be used within the loop. uses global $post
+ */
+if (! function_exists('ydn_authors_with_type') ):
+  function ydn_authors_with_type() {
+    global  $post;
+    $reporter_type = get_post_custom_values("reporter_type");
+    if (!empty($reporter_type) ) {
+       $reporter_type = $reporter_type[0]; //there should only be one key associated with this value
+       $reporter_type = '<br>' . $reporter_type;
+    } else {
+      $reporter_type = '';
+    }
+
+    coauthors_posts_links(); //this prints its own output
+    echo $reporter_type;
+  }
+endif; //edn function_exists condition
+
+/**
+ * outputs a twitter/facebook share links
+ */
+if (!function_exists('ydn_facebook_link') ):
+  function ydn_facebook_link() {
+    global $post;
+    $fb_options = get_option('fb_options');
+    if (empty($fb_options)) {
+      $fb_app = '';
+    } else {
+      $fb_app = $fb_options["app_id"];
+    }
+    $fb_params = array( "app_id" => $fb_app,
+                        "link" => get_permalink(),
+                        "name" => get_the_title(),
+                        "description" => get_the_excerpt(),
+                        "redirect_uri" => get_permalink() );
+    $fb_share_url = "https://www.facebook.com/dialog/feed?" . http_build_query($fb_params);
+    printf('<a href="%1$s" target="_blank">Share</a>',$fb_share_url);
+ }
+endif;
+
+if (!function_exists('ydn_twitter_link') ):
+  function ydn_twitter_link() {
+    global $post;
+    $twitter_params = array( "url" => get_permalink(),
+                        "text" => 'Checkout "' . get_the_title() . '"! ' . get_permalink(),
+                        "related" => "yaledailynews" );
+    $twitter_share_url = "https://twitter.com/share?" . http_build_query($twitter_params);
+    printf('<a href="%1$s" target="_blank">Tweet</a>',$twitter_share_url);
+ }
+endif;
 /**
  * Returns true if a blog has more than 1 category
  *

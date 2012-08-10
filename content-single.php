@@ -8,18 +8,19 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
 		<h1 class="entry-title"><?php the_title(); ?></h1>
-    <?php if(  has_post_thumbnail() ): ?>
-      <div class="entry-featured-image">
-        <?php the_post_thumbnail('entry-featured-image'); ?>
-      </div>
-    <?php endif; ?>
+    <?php ydn_get_featured_image(); ?>
 		<div class="entry-meta">
-      <div class="entry-authors">By <?php coauthors_posts_links(); ?></div>
+      <div class="entry-authors">By <?php ydn_authors_with_type(); ?></div>
       <div class="entry-pubdate"><?php ydn_posted_on(); ?></div>
 		</div><!-- .entry-meta -->
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
+    <ul class="social-share unstyled">
+    <li class="facebook"><?php ydn_facebook_link(); ?></li>
+    <li class="twitter"><?php ydn_twitter_link(); ?></li>
+      <li class="discuss"><a href="#comments-title">Discuss</a></li>
+    </ul>
 		<?php the_content(); ?>
 		<?php wp_link_pages( array( 'before' => '<div class="page-links">' . __( 'Pages:', 'ydn' ), 'after' => '</div>' ) ); ?>
 	</div><!-- .entry-content -->
@@ -35,17 +36,17 @@
 			if ( ! ydn_categorized_blog() ) {
 				// This blog only has 1 category so we just need to worry about tags in the meta text
 				if ( '' != $tag_list ) {
-					$meta_text = __( 'This entry was tagged %2$s. Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'ydn' );
+					$meta_text = __( 'This entry was tagged %2$s.', 'ydn' );
 				} else {
-					$meta_text = __( 'Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'ydn' );
+					$meta_text = '';
 				}
 
 			} else {
 				// But this blog has loads of categories so we should probably display them here
 				if ( '' != $tag_list ) {
-					$meta_text = __( 'This entry was posted in %1$s and tagged %2$s. Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'ydn' );
+					$meta_text = __( 'This entry was posted in %1$s and tagged %2$s.', 'ydn' );
 				} else {
-					$meta_text = __( 'This entry was posted in %1$s. Bookmark the <a href="%3$s" title="Permalink to %4$s" rel="bookmark">permalink</a>.', 'ydn' );
+					$meta_text = __( 'This entry was posted in %1$s.', 'ydn' );
 				}
 
 			} // end check for categories on this blog

@@ -106,8 +106,8 @@ function ydn_scripts() {
 	wp_enqueue_style( 'style', get_stylesheet_uri() );
   wp_enqueue_style( 'bootstrap-ydn', get_template_directory_uri() . '/css/ydn.css');
 
-	wp_enqueue_script( 'small-menu', get_template_directory_uri() . '/js/small-menu.js', array( 'jquery' ), '20120206', true );
   wp_enqueue_script( 'bootstrap-js', get_template_directory_uri() . '/js/bootstrap/bootstrap.js', array('jquery') );
+  wp_enqueue_script( 'ydn', get_template_directory_uri() . '/js/ydn.js', array('jquery','bootstrap-js') );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -118,6 +118,20 @@ function ydn_scripts() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'ydn_scripts' );
+
+/**
+ * Register custom metadata fields in the admin interface 
+ */
+
+function ydn_register_custom_metadata() {
+  if( function_exists( 'x_add_metadata_field' ) && function_exists( 'x_add_metadata_group' ) ) {
+    x_add_metadata_group( 'ydn_metadata', array('post'), array('label' => "YDN Metadata") );
+    x_add_metadata_field( 'ydn_reporter_type', array( 'post' ), array( 'label' => "Reporter type (e.g. Staff Reporter)",
+                                                                   'group' => 'ydn_metadata' ) );
+  }
+}
+
+add_action('admin_menu', 'ydn_register_custom_metadata');
 
 /**
  * Implement the Custom Header feature
