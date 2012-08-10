@@ -11,12 +11,11 @@
     </div> <!-- everything row -->
 	</div><!-- #main -->
 
-	<footer id="colophon" class="site-footer" role="contentinfo">
+	<footer id="colophon" class="site-footer container" role="contentinfo">
+    <div class="double-border"></div>
 		<div class="site-info">
-			<?php do_action( 'ydn_credits' ); ?>
-			<a href="http://wordpress.org/" title="<?php esc_attr_e( 'A Semantic Personal Publishing Platform', 'ydn' ); ?>" rel="generator"><?php printf( __( 'Proudly powered by %s', '_s' ), 'WordPress' ); ?></a>
-			<span class="sep"> | </span>
-			<?php printf( __( 'Theme: %1$s by %2$s.', 'ydn' ), '_s', '<a href="http://automattic.com/" rel="designer">Automattic</a>' ); ?>
+      &copy; <?php printf( date('Y') ); ?> Yale Daily News &bull; All Rights Reserved<br>
+      <a href="#">Rights and Permissions</a>
 		</div><!-- .site-info -->
 	</footer><!-- .site-footer .site-footer -->
 </div><!-- #page .hfeed .site -->
