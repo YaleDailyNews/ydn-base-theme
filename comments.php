@@ -27,7 +27,7 @@
 	<?php // You can start editing here -- including this comment! ?>
 
 	<?php if ( have_comments() ) : ?>
-		<h2 class="comments-title">
+		<h2 id="comments-title" class="comments-title">
 			<?php
 				printf( __( 'Comments', 'ydn' ) );
 			?>

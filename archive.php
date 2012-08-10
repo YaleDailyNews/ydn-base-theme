@@ -19,7 +19,7 @@ get_header(); ?>
 					<h1 class="page-title">
 						<?php
 							if ( is_category() ) {
-								printf( __( 'Category Archives: %s', 'ydn' ), '<span>' . single_cat_title( '', false ) . '</span>' );
+								printf( __( '%s', 'ydn' ), '<span>' . single_cat_title( '', false ) . '</span>' );
 
 							} elseif ( is_tag() ) {
 								printf( __( 'Tag Archives: %s', 'ydn' ), '<span>' . single_tag_title( '', false ) . '</span>' );
@@ -69,20 +69,24 @@ get_header(); ?>
 
 				<?php rewind_posts(); ?>
 
-				<?php ydn_content_nav( 'nav-above' ); ?>
+        <div class="content-list archive"> 
+            <?php /* Start the Loop */ ?>
+            <?php while ( have_posts() ) : the_post(); ?>
 
-				<?php /* Start the Loop */ ?>
-				<?php while ( have_posts() ) : the_post(); ?>
+            <?php
+              /* Include the Post-Format-specific template for the content.
+               * If you want to overload this in a child theme then include a file
+               * called content-___.php (where ___ is the Post Format name) and that will be used instead.
+               */
+              $format = get_post_format();
+              if (false == $format ) {
+                $format = "standard";
+              } 
+              get_template_part( 'list', $format );
+            ?>
 
-					<?php
-						/* Include the Post-Format-specific template for the content.
-						 * If you want to overload this in a child theme then include a file
-						 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-						 */
-						get_template_part( 'content', get_post_format() );
-					?>
-
-				<?php endwhile; ?>
+          <?php endwhile; ?>
+        </div> <!-- end .content-list.archive -->
 
 				<?php ydn_content_nav( 'nav-below' ); ?>
 
