@@ -126,7 +126,9 @@ function ydn_get_featured_image() {
                                             'include' => $featured_image_id,
                                             'post_type' => 'attachment',
                                             'post_parent' => $post->ID ) );
-    $featured_image_obj = $featured_image_obj[0];
+    if ( is_array($featured_image_obj) && !empty($featured_image_obj) ) {
+      $featured_image_obj = $featured_image_obj[0];
+    }
 
     ?>
     <div class="entry-featured-image">
@@ -201,6 +203,113 @@ if (!function_exists('ydn_twitter_link') ):
     printf('<a href="%1$s" target="_blank">Tweet</a>',$twitter_share_url);
  }
 endif;
+
+/* *
+ * This function is used to get the section for stories.
+ * It assumes that each story is in one top-level category,
+ * and returns the name of the first top-level cat it encounters.
+ * If no category is applied, it will simply return an empty string 
+ *
+ * Defaults to the current global post if none specified
+ * */
+if (!function_exists('ydn_get_top_level_cat') ):
+  function ydn_get_top_level_cat( ) {
+    global $post;
+    $cats = wp_get_post_categories( $post->ID, array("fields" => "all" ));
+    foreach ($cats as $cat) {
+      if ( $cat->parent == 0 ) {
+        return $cat->name;
+      }
+    }
+    return '';
+  }
+endif;
+
+/* *
+ * Draws the no-javascript carousel elements in place. Renders the container structure
+ * for the javascript-enabled version into a template at the bottom of the page.
+ *
+ * Function requires an array of posts and an HTML ID.  Allows args array as well.
+ */ 
+if (!class_exists('YDN_Carousel') ):
+  class YDN_Carousel {
+    public function __construct($posts, $html_id ) {
+      $this->posts = $posts;
+      $this->html_id = $html_id;
+
+      $this->render_no_js();
+      add_action('wp_print_footer_scripts', array($this, 'render_js_template') );
+    } 
+    private $posts, $html_id, $args;
+
+    private function render_no_js( ) {
+      global $post;
+      $temp_post = $post; //preserve the global post variable
+      $i = 0;
+
+      $post = $this->posts[0];
+      ?>   
+      <div id="<?php echo $this->html_id; ?>" class="carousel slide no-js">
+        <div class="carousel-inner">
+          <div class="item active">
+            <?php the_post_thumbnail('home-carousel'); ?>
+          </div>
+        </div>
+     </div>
+    <?php
+    $post = $temp_post;
+    }
+    
+    //must be public so that it can be called from the callback
+    public function render_js_template() {
+      global $post;
+      $temp_post = $post;
+      $i = 0;
+
+      ?>
+        <script id="<?php echo $this->html_id; ?>-template" type="text/html">
+          <div class="carousel-inner">
+            <?php foreach( $this->posts as $post): setup_postdata($post); ?>
+              <div class="item<?php if ($i == 0): ?> active<?php endif;?>" data-post-id="<?php echo $post->ID; ?>">
+                <?php the_post_thumbnail('home-carousel'); ?>
+                <div class="carousel-caption">
+                  <?php echo $this->render_navlist($i);  ?>
+                  <div class="meta">
+                    <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+                    <p><?php coauthors_posts_links(); ?> &bull; <?php echo get_the_excerpt(); ?></p>
+                  </div>
+                </div>
+              </div>
+            <?php $i++; endforeach; ?>
+          </div>
+        </script>
+
+      <?php
+      $post = $temp_post;
+    }
+
+    private function render_navlist($active_index) {
+      global $post;
+      $temp_post = $post;
+      $output = '<ul class="unstyled navlist">';
+      $i = 0;
+      foreach ($this->posts as $post) {
+        setup_postdata($post); 
+        $output = $output .  "<li data-post-id=\"$post->ID\"";
+        if ($i == $active_index) {
+          $output = $output . " class=\"arrow\"";
+        }
+        $output = $output . ">" . ydn_get_top_level_cat() .  "</li>";
+        $i++;
+      }
+
+      $output = $output . "</ul>";
+      $post = $temp_post;
+
+      return $output;
+   }
+ }
+endif; //class_exists
 /**
  * Returns true if a blog has more than 1 category
  *
@@ -239,3 +348,8 @@ function ydn_category_transient_flusher() {
 }
 add_action( 'edit_category', 'ydn_category_transient_flusher' );
 add_action( 'save_post', 'ydn_category_transient_flusher' );
+
+
+function ydn_get_home_page_content($limit) {
+  return get_posts(array( "numberposts" => $limit ) );
+}

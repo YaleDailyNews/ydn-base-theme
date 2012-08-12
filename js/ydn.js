@@ -3,11 +3,15 @@
   var YDN = window.YDN || (window.YDN = {});
 
   function initialize() {
-
+    var $body = $('body');
     //run the scripts for a single-post
-    if ( $('body.single-post') ) {
+    if ( $body.hasClass('single-post') ) {
       attach_social_handlers();
     }
+
+   if ( $body.hasClass('home') ) {
+     homepage_carousel_init();
+   }
   };
 
   /* social share buttons on story pages should launch popups
@@ -50,6 +54,46 @@
     } else {
       return '';
    }
+  };
+
+  /**
+   * replace the no-javascript HTML markup with the javascript-enabled markup that gets rendered
+   * into a <script> tag on the bottom of the page. then initialize the rotation.
+   */
+  function homepage_carousel_init() {
+    var $home_carousel = $('#home-carousel');
+    var $home_carousel_template = $('#home-carousel-template');
+    var $navlist, nav_height, $items;
+
+    $home_carousel.removeClass('no-js').html( $home_carousel_template.html() );
+    $home_carousel.carousel();
+
+    $navlist = $home_carousel.find('.navlist'); 
+    nav_height = $navlist.height();
+
+    $items = $home_carousel.find('.item');
+    /* this loop is pretty messy, but it's doing the job.
+     * it 1) makes sure the captions for each picture are tall enough to hold the nav list
+     *    2) binds the mouse over events for the navigation */
+   
+    $items.addClass('force-display'); //the items need to be visible so that the height calculations will work
+    $items.find('.carousel-caption').each(function(item_index, item_obj) {
+      var $item_obj = $(item_obj);
+
+      console.log($item_obj.height());
+      if (nav_height > $item_obj.height() ) {
+        $item_obj.height(nav_height);
+      }
+
+      $item_obj.find('.navlist li').each(function(li_index, li_obj) {
+        $li_obj = $(li_obj);
+        if (!$li_obj.hasClass('arrow')) {
+          $li_obj.mouseenter( function() { $home_carousel.removeClass('slide').carousel(li_index).addClass('slide'); return false; } );
+        }
+      });
+    });
+    $items.removeClass('force-display'); //allow the carousel styling to take over again
+
   };
 
   $(document).ready( initialize );

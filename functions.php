@@ -64,6 +64,7 @@ function ydn_setup() {
 	 */
 	add_theme_support( 'post-thumbnails' );
   add_image_size('entry-featured-image',630,9999999); /* crop the image so that it's 630px wide, don't care about height */
+  add_image_size('home-carousel',470,350,true);
 
 	/**
 	 * This theme uses wp_nav_menu() in one location.
@@ -128,6 +129,7 @@ function ydn_register_custom_metadata() {
     x_add_metadata_group( 'ydn_metadata', array('post'), array('label' => "YDN Metadata") );
     x_add_metadata_field( 'ydn_reporter_type', array( 'post' ), array( 'label' => "Reporter type (e.g. Staff Reporter)",
                                                                    'group' => 'ydn_metadata' ) );
+    x_add_metadata_field( "ydn_legacy_password", array('user'), array( 'label' => "YDN Legacy Password Hash" ) );
   }
 }
 
