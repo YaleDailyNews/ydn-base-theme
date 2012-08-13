@@ -26,7 +26,24 @@
     </div> <!-- end all content except right most column -->
 
     <div class="span5"> <!-- right most column -->
-      cross campus & ads
+      <div id="cross-campus" class="widget">
+        <a href="#"><h1>Cross Campus</h1></a>
+        <div class="content-list borders">
+          <div class="item">
+            <div class="section">University</div>
+            <a class="headline" href="#"><h3>This is a headline</h3></a>
+            <div class="datetime">10:37PM</div>
+            <div class="teaser">One two three four five.  <a href="#">››</a></div>
+          </div>
+          <div class="item">
+            <div class="section">University</div>
+            <a class="headline" href="#"><h3>This is a headline</h3></a>
+            <div class="datetime">10:37PM</div>
+            <div class="teaser">One two three four five.  <a href="#">››</a></div>
+          </div>
+
+        </div>
+      </div> <!-- end #cross campus -->
     </div> <!-- end right most column -->
 <?php get_footer(); ?>
 

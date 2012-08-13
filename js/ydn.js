@@ -63,10 +63,10 @@
   function homepage_carousel_init() {
     var $home_carousel = $('#home-carousel');
     var $home_carousel_template = $('#home-carousel-template');
-    var $navlist, nav_height, $items;
+    var $navlist, nav_height, $items, sliding = false;
 
     $home_carousel.removeClass('no-js').html( $home_carousel_template.html() );
-    $home_carousel.carousel();
+    $home_carousel.carousel({ interval: 7000, pause: false });
 
     $navlist = $home_carousel.find('.navlist'); 
     nav_height = $navlist.height();
@@ -88,11 +88,28 @@
       $item_obj.find('.navlist li').each(function(li_index, li_obj) {
         $li_obj = $(li_obj);
         if (!$li_obj.hasClass('arrow')) {
-          $li_obj.mouseenter( function() { $home_carousel.removeClass('slide').carousel(li_index).addClass('slide'); return false; } );
+          $li_obj.mouseenter( function() { 
+            if (! sliding ) {
+              console.log(arguments);
+              $home_carousel.removeClass('slide').carousel(li_index).addClass('slide').carousel('pause');
+              return false;
+            }
+          } );
         }
       });
     });
     $items.removeClass('force-display'); //allow the carousel styling to take over again
+
+
+    /* keep the sliding variable updated so that event handlers disable when sliding is happening */
+    $home_carousel.bind('slide', function() { sliding = true; } );
+    $home_carousel.bind('slid', function() { sliding = false; } );
+
+    /* there were some problems with bootstrap's implementation of pause-on-hover. When multiple 
+     * carousel(index)'s were calle in a short time span, the cycling didn't get reset appropriately.
+     * adding these handlers fixed the issues. */
+    $home_carousel.mouseenter( function() { $home_carousel.carousel('pause'); } );
+    $home_carousel.mouseleave( function() { $home_carousel.carousel('cycle'); } );
 
   };
 
