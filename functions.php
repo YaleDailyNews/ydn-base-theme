@@ -95,6 +95,15 @@ function ydn_widgets_init() {
 		'before_title' => '<h1 class="widget-title">',
 		'after_title' => '</h1>',
 	) );
+
+  register_sidebar( array(
+    'name' => __( 'Leaderboard', 'ydn' ),
+    'id' => 'leaderboard',
+    'before_widget' => '<div id="leaderboard">',
+    'after_widget' => '</div>',
+    'before_title' => '',
+    'after_title' => ''
+  ) );
 }
 add_action( 'widgets_init', 'ydn_widgets_init' );
 
@@ -119,6 +128,13 @@ function ydn_scripts() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'ydn_scripts' );
+
+/* A fomat function that defaults to standard */
+function ydn_get_post_format() {
+  global $post;
+  $format = get_post_format();
+  return ($format == false) ? "standard" : $format;
+}
 
 /**
  * Register custom metadata fields in the admin interface 

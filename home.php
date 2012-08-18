@@ -10,11 +10,8 @@
           $top_three = ydn_get_home_page_content(3);
           foreach ($top_three as $post): 
             setup_postdata($post);
-            $format = get_post_format();
-            if (false == $format) {
-               $format = "standard";
-            }
-            get_template_part('list', $format);
+
+            get_template_part('list', ydn_get_post_format());
           endforeach;
         ?>
               
