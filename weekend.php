@@ -7,6 +7,7 @@ Template Name: WEEKEND
 <?php get_header(); ?>
 
   <div id="weekend">
+    <?php require 'weekend/topnav.php' ?>
     <div class="blocks">
 
       <div class="block big pop-out">

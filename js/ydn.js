@@ -12,6 +12,10 @@
    if ( $body.hasClass('home') ) {
      homepage_carousel_init();
    }
+
+   if ($('#weekend').length > 0) {
+     weekend_top_nav();
+   }
   };
 
   /* social share buttons on story pages should launch popups
@@ -111,6 +115,36 @@
     $home_carousel.mouseenter( function() { $home_carousel.carousel('pause'); } );
     $home_carousel.mouseleave( function() { $home_carousel.carousel('cycle'); } );
 
+  };
+
+  /* sets up scrolling on the weekend top nav. if the user scrolls past the navigation,
+   * it will have it's position fixed to the top of the browser */
+  function weekend_top_nav() {
+    var header_fixed, $window, $header, header_offset;
+
+    //set the defaults for the values
+    //cache jQuery slectors so the event handler wont keep
+    //looking them up
+    header_fixed = false;
+    $window = $(window);
+    $header = $('#weekend .header .wrapper');
+    header_offset = $header.offset().top;
+
+    //define the event handler
+    function scroll_handler() {
+      var scroll_top = $window.scrollTop();
+      if (header_fixed && scroll_top < header_offset) {
+        $header.css('position','relative');
+        header_fixed = false;
+      } else if ( !header_fixed && scroll_top > header_offset) {
+        $header.css('position','fixed');
+        header_fixed = true;
+      }
+    };
+
+    //wrap the event handler in a throttle function to prevent excessive calls
+    //then attach it
+    $window.scroll( $.throttle(100,scroll_handler) );
   };
 
   $(document).ready( initialize );

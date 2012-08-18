@@ -67,10 +67,14 @@ function ydn_setup() {
   add_image_size('home-carousel',470,350,true);
 
 	/**
-	 * This theme uses wp_nav_menu() in one location.
+	 * This theme uses wp_nav_menu() in several locations.
 	 */
 	register_nav_menus( array(
 		'primary' => __( 'Primary Menu', 'ydn' ),
+	) );
+
+	register_nav_menus( array(
+		'weekend' => __( 'WEEKEND Menu', 'ydn' ),
 	) );
 
 	/**
@@ -117,7 +121,8 @@ function ydn_scripts() {
   wp_enqueue_style( 'bootstrap-ydn', get_template_directory_uri() . '/css/ydn.css');
 
   wp_enqueue_script( 'bootstrap-js', get_template_directory_uri() . '/js/bootstrap/bootstrap.js', array('jquery') );
-  wp_enqueue_script( 'ydn', get_template_directory_uri() . '/js/ydn.js', array('jquery','bootstrap-js') );
+  wp_enqueue_script( 'throttle-debounce', get_template_directory_uri() . '/js/jquery.ba-throttle-debounce.min.js', array('jquery') );
+  wp_enqueue_script( 'ydn', get_template_directory_uri() . '/js/ydn.js', array('jquery','bootstrap-js','throttle-debounce') );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
