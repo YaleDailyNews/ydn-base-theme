@@ -16,11 +16,7 @@
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
-    <ul class="social-share unstyled">
-    <li class="facebook"><?php ydn_facebook_link(); ?></li>
-    <li class="twitter"><?php ydn_twitter_link(); ?></li>
-      <li class="discuss"><a href="#comments-title">Discuss</a></li>
-    </ul>
+    <?php ydn_single_pre_content(); ?>
 		<?php the_content(); ?>
 		<?php wp_link_pages( array( 'before' => '<div class="page-links">' . __( 'Pages:', 'ydn' ), 'after' => '</div>' ) ); ?>
 	</div><!-- .entry-content -->

@@ -65,18 +65,6 @@ function ydn_setup() {
 	add_theme_support( 'post-thumbnails' );
   add_image_size('entry-featured-image',630,9999999); /* crop the image so that it's 630px wide, don't care about height */
   add_image_size('home-carousel',470,350,true);
-
-	/**
-	 * This theme uses wp_nav_menu() in several locations.
-	 */
-	register_nav_menus( array(
-		'primary' => __( 'Primary Menu', 'ydn' ),
-	) );
-
-	register_nav_menus( array(
-		'weekend' => __( 'WEEKEND Menu', 'ydn' ),
-	) );
-
 	/**
 	 * Add support for the Aside Post Formats
 	 */

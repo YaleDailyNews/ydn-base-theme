@@ -52,7 +52,7 @@
   /* extract metadata from the DOM for use in JS */
   function extract_metadata_for_key(key) {
     var $el = $('meta[property$=' + key + ']');
-    if ( $el ) {
+    if ( $el !== undefined && $el.length > 0 ) {
       $el = $el[0];
       return $el.content;
     } else {

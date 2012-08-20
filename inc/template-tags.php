@@ -225,22 +225,6 @@ if (!function_exists('ydn_get_top_level_cat') ):
   }
 endif;
 
-/* *
- * Similar to ydn_get_top_level_cat, but gets WEEKEND subcategory 
- */
-if (! function_exists("weekend_get_cat") ):
-  function weekend_get_cat() {
-    global $post;
-    $weekend_cat = get_category_by_slug("weekend");
-
-    $cats = wp_get_post_categories( $post->ID, array("fields" => "all"));
-    foreach ($cats as $cat) {
-      if ( $cat ->parent == $weekend_cat->ID ) {
-         return $cat->name;
-      }
-    }
-  }
-endif;
 
 /* *
  * Draws the no-javascript carousel elements in place. Renders the container structure
@@ -327,6 +311,18 @@ if (!class_exists('YDN_Carousel') ):
    }
  }
 endif; //class_exists
+
+if (! function_exists("ydn_single_pre_content") ):
+  function ydn_single_pre_content() {
+  ?>
+    <ul class="social-share unstyled">
+      <li class="facebook"><?php ydn_facebook_link(); ?></li>
+      <li class="twitter"><?php ydn_twitter_link(); ?></li>
+      <li class="discuss"><a href="#comments-title">Discuss</a></li>
+    </ul>
+  <?php
+  }
+endif;
 
 /**
  * Returns true if a blog has more than 1 category
