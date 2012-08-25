@@ -69,10 +69,11 @@ function ydn_setup() {
 	 * Add support for the Aside Post Formats
 	 */
 	add_theme_support( 'post-formats', array( 'aside', ) );
+
+                                                
 }
 endif; // ydn_setup
 add_action( 'after_setup_theme', 'ydn_setup' );
-
 /**
  * Register widgetized area and update sidebar with default widgets
  *
@@ -96,6 +97,9 @@ function ydn_widgets_init() {
     'before_title' => '',
     'after_title' => ''
   ) );
+
+
+
 }
 add_action( 'widgets_init', 'ydn_widgets_init' );
 
@@ -140,6 +144,7 @@ function ydn_register_custom_metadata() {
                                                                    'group' => 'ydn_metadata' ) );
     x_add_metadata_field( "ydn_legacy_password", array('user'), array( 'label' => "YDN Legacy Password Hash" ) );
   }
+
 }
 
 add_action('admin_menu', 'ydn_register_custom_metadata');
@@ -149,3 +154,4 @@ add_action('admin_menu', 'ydn_register_custom_metadata');
  */
 //require( get_template_directory() . '/inc/custom-header.php' );
 require( get_template_directory() . '/inc/bootstrap-menu-walker.php' );
+require( get_template_directory() . '/inc/slideshow-slides.php');
