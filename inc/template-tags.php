@@ -270,13 +270,24 @@ if (!class_exists('YDN_Carousel') ):
       ?>
         <script id="<?php echo $this->html_id; ?>-template" type="text/html">
           <div class="carousel-inner">
-            <?php foreach( $this->posts as $post): setup_postdata($post); ?>
+          <?php 
+                foreach( $this->posts as $post): 
+                  setup_postdata($post); 
+                  if (get_post_type($post->ID) == 'slideshow-slide') {
+                    //setup the variables for the custom posts that link to arbitrary URLs
+                    $url = get_post_meta(  $post->ID, 'ydn_slideshow_url', true );
+                    $is_custom_post = true;
+                  } else {
+                    $url = get_permalink($post->ID);
+                    $is_custom_post = false;
+                  }
+            ?>
               <div class="item<?php if ($i == 0): ?> active<?php endif;?>" data-post-id="<?php echo $post->ID; ?>">
                 <?php the_post_thumbnail('home-carousel'); ?>
                 <div class="carousel-caption">
                   <?php echo $this->render_navlist($i);  ?>
                   <div class="meta">
-                    <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                    <h3><a href="<?php echo $url; ?>"><?php the_title(); ?></a></h3>
                     <p><span class="bylines"><?php coauthors_posts_links(); ?></span> &bull; <?php echo get_the_excerpt(); ?></p>
                   </div>
                 </div>
@@ -296,11 +307,18 @@ if (!class_exists('YDN_Carousel') ):
       $i = 0;
       foreach ($this->posts as $post) {
         setup_postdata($post); 
+        if (get_post_type($post->ID) == 'slideshow-slide') {
+          //setup the variables for the custom posts that link to arbitrary URLs
+          $cat = get_post_meta( $post->ID, 'ydn_slideshow_cat', true );
+        } else {
+          $cat = ydn_get_top_level_cat();
+        }
+
         $output = $output .  "<li data-post-id=\"$post->ID\"";
         if ($i == $active_index) {
           $output = $output . " class=\"arrow\"";
         }
-        $output = $output . ">" . ydn_get_top_level_cat() .  "</li>";
+        $output = $output . ">" . $cat .  "</li>";
         $i++;
       }
 

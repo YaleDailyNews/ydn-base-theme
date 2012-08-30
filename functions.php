@@ -7,6 +7,12 @@
  */
 
 /**
+ * Start by defining some constants that get used throughout the theme
+ */
+
+define("XC_BLOG_ID",2);
+
+/**
  * Set the content width based on the theme's design and stylesheet.
  *
  * @since ydn 1.0
@@ -92,11 +98,23 @@ function ydn_widgets_init() {
   register_sidebar( array(
     'name' => __( 'Leaderboard', 'ydn' ),
     'id' => 'leaderboard',
+    'class' => 'sidebar-widgets',
     'before_widget' => '<div id="leaderboard">',
     'after_widget' => '</div>',
     'before_title' => '',
     'after_title' => ''
   ) );
+
+  register_sidebar( array(
+    'name' => __( 'Homepage Advertisements', 'ydn' ),
+    'id' => 'home-advertisements',
+    'class' => 'sidebar-widgets',
+    'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget' => "</aside>",
+		'before_title' => '<h1 class="widget-title">',
+		'after_title' => '</h1>',
+  ) );
+
 
 
 
@@ -155,3 +173,4 @@ add_action('admin_menu', 'ydn_register_custom_metadata');
 //require( get_template_directory() . '/inc/custom-header.php' );
 require( get_template_directory() . '/inc/bootstrap-menu-walker.php' );
 require( get_template_directory() . '/inc/slideshow-slides.php');
+require( get_template_directory() . '/inc/ydn-homepage-content.php');

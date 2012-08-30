@@ -31,7 +31,7 @@ function ydn_register_slideshow_slide() {
             'has_archive' => true, 
             'hierarchical' => false,
             'menu_position' => null,
-            'supports' => array( 'title', 'thumbnail', 'excerpt'  )
+            'supports' => array( 'title', 'thumbnail', 'excerpt', 'author'  )
       ); 
       register_post_type('slideshow-slide',$args);
      
@@ -40,7 +40,9 @@ add_action( 'init', 'ydn_register_slideshow_slide',1);//register early so we bea
 
 //add in the custom field that tracks the URL
 function ydn_register_slideshow_metadata() {
-  x_add_metadata_field( 'ydn_slideshow_url', array( 'slideshow-slide' ), array( 'label' => "Slide target URL:" ) );
+  x_add_metadata_group( 'ydn_slideshow_data', array( 'slideshow-slide'), array( 'label' => "Slide Options")  );
+  x_add_metadata_field( 'ydn_slideshow_url', array( 'slideshow-slide' ), array( 'label' => "Slide target URL:", "group" => 'ydn_slideshow_data' ) );
+  x_add_metadata_field( 'ydn_slideshow_cat', array( 'slideshow-slide' ), array( 'label' => "Slide category text:", "group" => 'ydn_slideshow_data') );
 }
 
 add_action('admin_menu', 'ydn_register_slideshow_metadata');
