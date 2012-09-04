@@ -4,7 +4,7 @@
   <a class="headline" href="<?php echo get_permalink(); ?>"><h3><?php the_title(); ?></h3></a>
   <div class="meta">
     <span class="bylines">By <?php coauthors_posts_links(); ?></span>
-    <span class="datetime"><?php echo get_the_date(); ?> &bull; <a href="<?php echo get_permalink();?>#comments-title" class="comment-count">(<?php echo $post->comment_count; ?>)</a> </span>
+    <span class="datetime"><?php echo get_the_date(); ?> &bull; <?php ydn_comment_count(); ?></span>
   </div>
-  <div class="teaser"><?php echo get_the_excerpt(); ?> <a href="<?php echo get_permalink(); ?>">››</a></div>
+  <div class="teaser"><?php echo get_the_excerpt(); ?></div>
 </div> 

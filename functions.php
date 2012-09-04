@@ -71,6 +71,7 @@ function ydn_setup() {
 	add_theme_support( 'post-thumbnails' );
   add_image_size('entry-featured-image',630,9999999); /* crop the image so that it's 630px wide, don't care about height */
   add_image_size('home-carousel',470,350,true);
+  add_image_size('home-print-section',230,176,true);
 	/**
 	 * Add support for the Aside Post Formats
 	 */
@@ -166,6 +167,18 @@ function ydn_register_custom_metadata() {
 }
 
 add_action('admin_menu', 'ydn_register_custom_metadata');
+
+/**
+ * Add our >> read more button to the end of excerpts 
+ */
+if (! function_exists("ydn_excerpt_read_more") ):
+  function ydn_excerpt_read_more($more) {
+           global $post;
+           return ' <a href="'. get_permalink($post->ID) . '">&raquo;</a>';
+  }
+  add_filter('excerpt_more', 'ydn_excerpt_read_more');
+endif;
+
 
 /**
  * Implement the Custom Header feature

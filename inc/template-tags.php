@@ -332,6 +332,8 @@ endif; //class_exists
 
 if (! function_exists("ydn_single_pre_content") ):
   function ydn_single_pre_content() {
+    //the content that gets printed before the actual text of an article
+    //plugged by the WEEKEND theme to replace social sharing with WEEKEND specific styles
   ?>
     <ul class="social-share unstyled">
       <li class="facebook"><?php ydn_facebook_link(); ?></li>
@@ -339,6 +341,16 @@ if (! function_exists("ydn_single_pre_content") ):
       <li class="discuss"><a href="#comments-title">Discuss</a></li>
     </ul>
   <?php
+  }
+endif;
+
+if (! function_exists("ydn_comment_count") ):
+  function ydn_comment_count() {
+    //prints a link to the article w/ the number of comments
+    global $post;
+    ?>
+    <a href="<?php echo get_permalink();?>#comments-title" class="comment-count">(<?php echo $post->comment_count; ?>)</a> 
+    <?php
   }
 endif;
 
@@ -382,6 +394,3 @@ add_action( 'edit_category', 'ydn_category_transient_flusher' );
 add_action( 'save_post', 'ydn_category_transient_flusher' );
 
 
-function ydn_get_home_page_content($limit) {
-  return get_posts(array( "numberposts" => $limit ) );
-}
