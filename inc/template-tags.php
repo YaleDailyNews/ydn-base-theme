@@ -382,6 +382,29 @@ function ydn_categorized_blog() {
 }
 
 /**
+ * Returns the most recent attachment that has the specified "special type" metadata 
+ */
+function ydn_get_special_image($type,$size) {
+  //pull the image of special type $type, then render it in $size
+  $args = array( 'post_type' => 'attachment',
+                 'post_status' => 'any',
+                 'posts_per_page' => 1,
+                 'order' => 'DESC',
+                 'orderby' => 'date',
+                 'meta_query' => array( array( 'key' => '_ydn_attachment_special_type', 'value' => $type, 'type' => 'BINARY') )
+               );
+  $query = new WP_Query($args);
+
+  //rendering time
+  if ($query->have_posts()) {
+    $attach_id = $query->posts[0]->ID;
+    echo wp_get_attachment_image($attach_id, $size);
+  }
+  
+}
+
+
+/**
  * Flush out the transients used in ydn_categorized_blog
  *
  * @since ydn 1.0

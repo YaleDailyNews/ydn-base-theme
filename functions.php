@@ -72,6 +72,7 @@ function ydn_setup() {
   add_image_size('entry-featured-image',630,9999999); /* crop the image so that it's 630px wide, don't care about height */
   add_image_size('home-carousel',470,350,true);
   add_image_size('home-print-section',230,176,true);
+  add_image_size('home-print-section-narrow',230,285,true);
 	/**
 	 * Add support for the Aside Post Formats
 	 */
@@ -153,20 +154,93 @@ function ydn_get_post_format() {
 }
 
 /**
- * Register custom metadata fields in the admin interface 
+ * Register custom metadata fields in the admin interface
  */
 
 function ydn_register_custom_metadata() {
   if( function_exists( 'x_add_metadata_field' ) && function_exists( 'x_add_metadata_group' ) ) {
+    //story level meta-data
     x_add_metadata_group( 'ydn_metadata', array('post'), array('label' => "YDN Metadata") );
     x_add_metadata_field( 'ydn_reporter_type', array( 'post' ), array( 'label' => "Reporter type (e.g. Staff Reporter)",
                                                                    'group' => 'ydn_metadata' ) );
+
+    //user level meta
     x_add_metadata_field( "ydn_legacy_password", array('user'), array( 'label' => "YDN Legacy Password Hash" ) );
+
   }
 
 }
 
 add_action('admin_menu', 'ydn_register_custom_metadata');
+
+
+/**
+ * Register custom metadata for our attachments.  Unforunately, the custom metadata manager doesn't work with 
+ * attachments and we have to do these by hand 
+ *
+ * The flags we register here allow images to be marked for the home page as WEEKEND cover/Front Page/Magazine Cover
+ */
+
+
+/**
+ * Render a select box on the attachment page that allows users to mark an image
+ * as a special type 
+ */
+
+//start building the html we need to render the select box 
+//build a simple function to render options on the attachment page
+function ydn_build_option($name,$value,$current_value) {
+   $o = '<option value="' . $value . '"';
+   if ($value == $current_value) {
+     $o .= 'selected="selected"';
+   }
+   $o .= '>' . $name . '</option>';
+
+   return $o;
+}
+
+function ydn_attachment_fields_to_edit($form_fields, $post) {
+  // $form_fields is a special array of fields to include in the attachment form
+  // $post is the attachemnt record in the database $post->post_type == 'attachment'
+  // (attachments are treated as posts in the wordpress database)
+
+  //grab what the meta is set to currently so that we can choose the appropriate default for the select box 
+  $current_value = get_post_meta($post->ID, "_ydn_attachment_special_type", true); 
+
+
+      
+  $field_name = 'attachments[' . $post->ID . '][_ydn_attachment_special_type]';
+
+  $html = '<select name="' . $field_name  . '" id="' . $field_name . '">';
+  $html .= ydn_build_option("None","",$current_value);
+  $html .= ydn_build_option("Front Page","front_page",$current_value);
+  $html .= ydn_build_option("WEEKEND Cover","weekend_cover",$current_value);
+  $html .= ydn_build_option("Magazine Cover","magazine_cover",$current_value);
+  $html .= '</select>';
+  //add our custom field to $form fields
+  $form_fields["ydn_attachment_special_type"] = array(
+      "label" => __("Special Type?"),
+      "input" => "html",
+      "html" => $html,
+  );
+
+  return $form_fields;
+
+}
+add_filter("attachment_fields_to_edit", "ydn_attachment_fields_to_edit", 100, 2);
+
+
+/**
+ * A handler to save the attachment fields when the edit form
+ * is submitted. */
+function ydn_attachment_fields_to_save($post, $attachment) {
+  // $attachment part of the form $_POST ($_POST[attachments][postID])
+  // $post attachments wp post array -- will be saved after returned
+  if ( isset($attachment["_ydn_attachment_special_type"]) ) {
+    update_post_meta($post['ID'], '_ydn_attachment_special_type', $attachment["_ydn_attachment_special_type"]);
+  }
+}
+add_filter("attachment_fields_to_save", "ydn_attachment_fields_to_save", null, 2);
 
 /**
  * Add our >> read more button to the end of excerpts 

@@ -57,8 +57,41 @@
       <div class="row border6">
         <div class="span6">
           <!-- column with sports/weekend/today's paper -->
-          sports/weekend/today
-        </div>
+          <div class="print-section">
+            <h1>Sports</h1>
+            <?php
+              $sports_content = $print_section_content->get_content_for_cat("sports",2); //this is the list/featrued array
+              $sports_stories = $sports_content["list"]; //this is a flat array of stories to be looped through
+              array_unshift( $sports_stories, $sports_content["featured"] );
+            ?>
+            <a href="<?php echo get_permalink($sports_content["featured"]->ID); ?>">
+            <?php
+              echo get_the_post_thumbnail($sports_content["featured"]->ID, 'home-print-section-narrow');
+            ?>
+            </a>
+            <div class="content-list">
+              <?php foreach( $sports_stories as $post ): setup_postdata($post); ?>
+                <div class="item">
+                  <a href="<?php the_permalink(); ?>" class="headline"><?php the_title(); ?></a>
+                  <span class="meta"><a href="<?php the_permalink(); ?>" class="comment-count"><?php ydn_comment_count(); ?></a></span>
+                </div>
+              <?php endforeach; ?>
+            </div><!-- content-list -->
+          </div><!-- print-section -->
+          <div class="print-section">
+            <h1>Today's Paper</h1>
+            <a href="#"><?php ydn_get_special_image("front_page","home-print-section-narrow"); ?></a>
+          </div><!-- print-section -->
+          <div class="print-section">
+            <h1>WEEKEND</h1>
+            <a href="#"><?php ydn_get_special_image("weekend_cover","home-print-section-narrow"); ?></a>
+          </div><!-- print-section -->
+          <div class="print-section">
+            <h1>Magazine</h1>
+            <a href="#"><?php ydn_get_special_image("magazine_cover","home-print-section-narrow"); ?></a>
+          </div><!-- print-section -->
+
+        </div><!-- .span6 -->
 
         <div class="span13">
           <!-- column with content for most of the sections of the paper -->
