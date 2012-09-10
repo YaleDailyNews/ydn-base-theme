@@ -9,8 +9,6 @@
       <div class="row border7">
         <div class="span7 content-list narrow borders" id="top-three">
         <?php
-          global $post;
-          global $ydn_suppress_thumbnails;
           $ydn_suppress_thumbnails = true; // ugly hack, but necessary to pass variables to template
 
           foreach ($top_three_content as $post): 
@@ -23,6 +21,21 @@
         </div> <!-- #top-three -->
         <div class="span12" id="slideshow-multimedia"> 
           <?php new YDN_Carousel( $slideshow_content, "home-carousel" ); ?>
+          <div class="row" id="video-thumbnails">
+            <?php
+              $videos_query = new WP_Query( array( 'post_type' => 'video',
+                                                   'posts_per_page' => '3',
+                                                   'orderby' => 'date',
+                                                   'order' => 'DESC' ) );
+             while ( $videos_query->have_posts() ) : $videos_query->the_post();
+            ?>
+              <div class="span4 item">
+                <a href="<?php echo get_permalink(); ?>" class="image"><?php the_post_thumbnail('home-video-thumbnail'); ?><span></span></a>
+                <a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a>
+              </div>
+            <?php endwhile; ?>
+          </div> <!-- #video-thumbnails -->
+          <div id="more-videos"><a href="#">More Videos &raquo;</a></div>
         </div><!-- #sldieshow-multimedia -->
       </div>
       <!-- starting the most-read/opinion section -->

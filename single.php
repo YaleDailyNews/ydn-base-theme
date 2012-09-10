@@ -13,7 +13,14 @@ get_header(); ?>
 
 			<?php while ( have_posts() ) : the_post(); ?>
 
-				<?php get_template_part( 'content', 'single' ); ?>
+        <?php
+         if ( get_post_type($post->ID) == 'video' ) { 
+           get_template_part( 'content', 'single-video' );
+         } else {
+           get_template_part( 'content', 'single' );
+         }
+
+        ?>
 
 				<?php
 					// If comments are open or we have at least one comment, load up the comment template

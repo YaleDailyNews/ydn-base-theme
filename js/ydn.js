@@ -3,6 +3,8 @@
   var YDN = window.YDN || (window.YDN = {});
 
   function initialize() {
+    equally_space_horizontally('#menu-primary-menu'); //spaces the links in the nav under the masthead
+
     var $body = $('body');
     //run the scripts for a single-post
     if ( $body.hasClass('single-post') ) {
@@ -15,6 +17,10 @@
 
    if ($('#weekend').length > 0) {
      weekend_top_nav();
+   }
+
+   if ($body.hasClass('category-opinion') ) {
+     opinion_init();
    }
   };
 
@@ -84,7 +90,6 @@
     $items.find('.carousel-caption').each(function(item_index, item_obj) {
       var $item_obj = $(item_obj);
 
-      console.log($item_obj.height());
       if (nav_height > $item_obj.height() ) {
         $item_obj.height(nav_height);
       }
@@ -94,7 +99,6 @@
         if (!$li_obj.hasClass('arrow')) {
           $li_obj.mouseenter( function() { 
             if (! sliding ) {
-              console.log(arguments);
               $home_carousel.removeClass('slide').carousel(li_index).addClass('slide').carousel('pause');
               return false;
             }
@@ -145,6 +149,28 @@
     //wrap the event handler in a throttle function to prevent excessive calls
     //then attach it
     $window.scroll( $.throttle(100,scroll_handler) );
+  };
+
+  /* some initialization for the opinion category landing page */
+  function opinion_init() {
+    equally_space_horizontally('#opinion-cat-selector');
+  };
+
+  /* utility function used to evenly space <li> elements horizontally */
+  /* selector is a CSS selector that targets the item you want to affect */
+  /* the selector should be an ID to guarantee uniqueness */
+  function equally_space_horizontally(selector)  {
+    var $selector = $(selector); //this is the UL we're styling
+    if ($selector.length == 0) { return; }
+
+    $selector.removeClass('no-script'); //no-script styles can be applied to manage spacing very roughly
+    var container_width = $selector.width();
+    var links_width = 0;
+    $selector.children().each(function() {
+      links_width += $(this).outerWidth(true);
+    });
+    var link_spacing = Math.floor((container_width - links_width) / ($selector.children().length - 1)) - 1;
+    $selector.find('> li:not(:last-child)').css('margin-right', link_spacing + "px");
   };
 
   $(document).ready( initialize );

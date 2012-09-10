@@ -73,6 +73,8 @@ function ydn_setup() {
   add_image_size('home-carousel',470,350,true);
   add_image_size('home-print-section',230,176,true);
   add_image_size('home-print-section-narrow',230,285,true);
+  add_image_size('opinion-featured',550,425,true);
+  add_image_size('home-video-thumbnail',150,100,true);
 	/**
 	 * Add support for the Aside Post Formats
 	 */
@@ -163,6 +165,8 @@ function ydn_register_custom_metadata() {
     x_add_metadata_group( 'ydn_metadata', array('post'), array('label' => "YDN Metadata") );
     x_add_metadata_field( 'ydn_reporter_type', array( 'post' ), array( 'label' => "Reporter type (e.g. Staff Reporter)",
                                                                    'group' => 'ydn_metadata' ) );
+    x_add_metadata_field( 'ydn_opinion_column', array( 'post'), array ( 'label' => "Opinion column (for staff columnists)",
+                                                                       'group' => 'ydn_metadata') );
 
     //user level meta
     x_add_metadata_field( "ydn_legacy_password", array('user'), array( 'label' => "YDN Legacy Password Hash" ) );
@@ -216,6 +220,7 @@ function ydn_attachment_fields_to_edit($form_fields, $post) {
   $html .= ydn_build_option("Front Page","front_page",$current_value);
   $html .= ydn_build_option("WEEKEND Cover","weekend_cover",$current_value);
   $html .= ydn_build_option("Magazine Cover","magazine_cover",$current_value);
+  $html .= ydn_build_option("Featured Opinion Image","opinion_featured_image",$current_value);
   $html .= '</select>';
   //add our custom field to $form fields
   $form_fields["ydn_attachment_special_type"] = array(
@@ -261,3 +266,4 @@ endif;
 require( get_template_directory() . '/inc/bootstrap-menu-walker.php' );
 require( get_template_directory() . '/inc/slideshow-slides.php');
 require( get_template_directory() . '/inc/ydn-homepage-content.php');
+require( get_template_directory() . '/inc/video-post-type.php');
