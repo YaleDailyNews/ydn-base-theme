@@ -13,7 +13,7 @@ if (! function_exists("ydn_home_print_section") ):
     //first post we deal with is featured, so pop it into the global
     $post = $section_content["featured"];
     ?>
-    <div class="print-section content-list">
+    <div class="print-section content-list narrow">
       <h1><?php echo $slug; ?></h1>
       <div class="row">
         <div class="span6 featured item">

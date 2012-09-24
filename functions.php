@@ -244,6 +244,8 @@ function ydn_attachment_fields_to_save($post, $attachment) {
   if ( isset($attachment["_ydn_attachment_special_type"]) ) {
     update_post_meta($post['ID'], '_ydn_attachment_special_type', $attachment["_ydn_attachment_special_type"]);
   }
+
+  return $post;
 }
 add_filter("attachment_fields_to_save", "ydn_attachment_fields_to_save", null, 2);
 
